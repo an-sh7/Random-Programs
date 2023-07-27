@@ -6,7 +6,7 @@ public class ToDoListApp {
     private ArrayList<Task> tasks;
 
     public ToDoListApp() {
-        this.tasks = new ArrayList<>();
+        this.tasks = new ArrayList <>();
     }
 
     public void addTask(String description) {
