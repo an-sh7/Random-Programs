@@ -2,9 +2,6 @@ import java.util.Scanner;
 public class Lowhighguess {
     public static void main(String[] args) {
         int randomnum = (int) (Math.random() * 100);
-        //For testing 
-        System.out.println(randomnum);
-        //For Testing
         int Points = 0;
         int Attempts = 0;
         Scanner sc = new Scanner(System.in);
