@@ -142,7 +142,7 @@ public class Main extends JFrame {
     }
 
     private void applyRBAC() {
-        // Disable or enable buttons based on the user's role
+        // Disable or enable stuff
         if (currentUserRole.equals("Admin")) {
             withdrawButton.setEnabled(true);
             depositButton.setEnabled(true);
@@ -156,14 +156,14 @@ public class Main extends JFrame {
             checkBalanceButton.setEnabled(true);
             manageUsersButton.setEnabled(false);
             changeSettingsButton.setEnabled(false);
-            logoutButton.setEnabled(true); // Enable Logout for RegularUser
+            logoutButton.setEnabled(true); 
         } else {
             withdrawButton.setEnabled(false);
             depositButton.setEnabled(false);
             checkBalanceButton.setEnabled(true);
             manageUsersButton.setEnabled(false);
             changeSettingsButton.setEnabled(false);
-            logoutButton.setEnabled(true); // Disable Logout for Guest
+            logoutButton.setEnabled(true); 
         }
     }
 
