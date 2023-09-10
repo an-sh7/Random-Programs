@@ -14,7 +14,7 @@ class BankAccount {
     public void deposit(int amount) {
         if (amount > 0) {
             balance += amount;
-            System.out.println("Deposit of $" + amount + " successful.");
+            System.out.println("Deposit of " + amount + " rupee successful.");
         } else {
             System.out.println("Invalid deposit amount.");
         }
@@ -23,7 +23,7 @@ class BankAccount {
     public void withdraw(int amount) {
         if (amount > 0 && amount <= balance) {
             balance -= amount;
-            System.out.println("Withdrawal of $" + amount + " successful.");
+            System.out.println("Withdrawal of " + amount + " rupee successful.");
         } else {
             System.out.println("Invalid withdrawal amount or insufficient funds.");
         }
@@ -36,7 +36,7 @@ class ATM {
     public ATM(BankAccount account) {
         this.account = account;
     }
-
+        
     public void displayMenu() {
         System.out.println("ATM Menu:");
         System.out.println("1. Check Balance");
@@ -56,15 +56,15 @@ class ATM {
 
             switch (choice) {
                 case 1:
-                    System.out.println("Current Balance: $" + account.getBalance());
+                    System.out.println("Current Balance: " + account.getBalance()+"Rs");
                     break;
                 case 2:
-                    System.out.print("Enter the deposit amount: $");
+                    System.out.print("Enter the deposit amount: ");
                     int depositAmount = scanner.nextInt();
                     account.deposit(depositAmount);
                     break;
                 case 3:
-                    System.out.print("Enter the withdrawal amount: $");
+                    System.out.print("Enter the withdrawal amount: ");
                     int withdrawalAmount = scanner.nextInt();
                     account.withdraw(withdrawalAmount);
                     break;
@@ -83,7 +83,7 @@ class ATM {
 
 public class Main {
     public static void main(String[] args) {
-        BankAccount userAccount = new BankAccount(1000); // Initial balance is $1000
+        BankAccount userAccount = new BankAccount(1000);
         ATM atm = new ATM(userAccount);
         atm.run();
     }
