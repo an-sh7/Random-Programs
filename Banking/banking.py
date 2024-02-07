@@ -1,21 +1,23 @@
 import os
 
 class Bank:
-    def _init_(self):
-        self.balance = 0
+    def __init__(self):
+        pass
 
     def deposit(self, user_account, amount):
         if self.validate_account(user_account):
-            self.balance += amount
-            print(f"${amount} added to your account\nNow the total is ${self.balance}")
+            user_account.balance += amount
+            user_account.update_account_file()
+            print(f"${amount} added to your account\nNow the total is ${user_account.balance}")
         else:
             print("Invalid account credentials")
 
     def withdraw(self, user_account, amount):
         if self.validate_account(user_account):
-            if self.balance >= amount:
-                self.balance -= amount
-                print(f"${amount} removed from your account\nNow the total is ${self.balance}")
+            if user_account.balance >= amount:
+                user_account.balance -= amount
+                user_account.update_account_file()
+                print(f"${amount} removed from your account\nNow the total is ${user_account.balance}")
             else:
                 print("Not enough funds in your account")
         else:
@@ -23,31 +25,38 @@ class Bank:
 
     def show(self, user_account):
         if self.validate_account(user_account):
-            print(f"There is nothing special in this function, I just wanted to troll you. Here is your balance ${self.balance}")
+            print(f"Balance in your account: ${user_account.balance}")
         else:
             print("Invalid account credentials")
 
     def validate_account(self, user_account):
         try:
             file_path = f"{user_account.account_no}_{user_account.name}.txt"
-            with open(file_path, 'r') as file:
-                stored_pin = int(file.readline().strip())
-                return stored_pin == user_account.pin
+            if os.path.exists(file_path):
+                with open(file_path, 'r') as file:
+                    stored_data = file.readline().strip().split(',')
+                    stored_pin = int(stored_data[0])
+                    stored_balance = float(stored_data[1])
+                if stored_pin == user_account.pin:
+                    user_account.balance = stored_balance
+                    return True
+            return False
         except FileNotFoundError:
             return False
 
 
 class Account:
-    def _init_(self, name, account_no, pin) -> None:
+    def __init__(self, name, account_no, pin) -> None:
         self.name = name
         self.account_no = account_no
         self.pin = pin
+        self.balance = 0
 
     def newacc(self):
         file_path = f"{self.account_no}_{self.name}.txt"
         if not os.path.isfile(file_path):
             with open(file_path, 'w') as file:
-                file.write(f"{self.pin}\n")
+                file.write(f"{self.pin},{self.balance}\n")
 
     def delete_account(self):
         file_path = f"{self.account_no}_{self.name}.txt"
@@ -57,6 +66,16 @@ class Account:
         except FileNotFoundError:
             return "Account not found."
 
+    def update_account_file(self):
+        file_path = f"{self.account_no}_{self.name}.txt"
+        with open(file_path, 'w') as file:
+            file.write(f"{self.pin},{self.balance}\n")
+
+def get_user_input():
+    account_name = input("Enter the bank holder's full name: ")
+    account_no = int(input("Enter the holder's bank account number: "))
+    pin = int(input(f"Enter {account_name}'s PIN: "))
+    return account_name, account_no, pin
 
 def interface():
     bank_instance = Bank()
@@ -68,25 +87,19 @@ def interface():
             choice = int(input("Enter your choice (1-6): "))
 
             if choice == 1:
-                account_name = input("Enter the bank holder's full name: ")
-                account_no = int(input("Enter the holder's bank account number: "))
-                pin = int(input(f"Enter {account_name}'s PIN: "))
-                amount = int(input("Enter the amount to be deposited: $"))
+                account_name, account_no, pin = get_user_input()
+                amount = float(input("Enter the amount to be deposited: $"))
                 user_account = Account(account_name, account_no, pin)
                 bank_instance.deposit(user_account, amount)
 
             elif choice == 2:
-                account_name = input("Enter the bank holder's full name: ")
-                account_no = int(input("Enter the holder's bank account number: "))
-                pin = int(input(f"Enter {account_name}'s PIN: "))
-                amount = int(input("Enter the amount to be Withdrawn: $"))
+                account_name, account_no, pin = get_user_input()
+                amount = float(input("Enter the amount to be Withdrawn: $"))
                 user_account = Account(account_name, account_no, pin)
                 bank_instance.withdraw(user_account, amount)
 
             elif choice == 3:
-                account_name = input("Enter the bank holder's full name: ")
-                account_no = int(input("Enter the holder's bank account number: "))
-                pin = int(input(f"Enter {account_name}'s PIN: "))
+                account_name, account_no, pin = get_user_input()
                 user_account = Account(account_name, account_no, pin)
                 bank_instance.show(user_account)
 
@@ -99,9 +112,7 @@ def interface():
                 print("Account created.")
 
             elif choice == 5:
-                account_name = input("Enter the bank holder's full name: ")
-                account_no = int(input("Enter the holder's bank account number: "))
-                pin = int(input(f"Enter {account_name}'s PIN: "))
+                account_name, account_no, pin = get_user_input()
                 user_account = Account(account_name, account_no, pin)
                 result = user_account.delete_account()
                 print(result)
@@ -116,5 +127,5 @@ def interface():
         except ValueError:
             print("Invalid input. Please enter a number.")
 
-if __name__ == "_main_":
+if __name__ == "__main__":
     interface()
